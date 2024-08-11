@@ -1,0 +1,5 @@
+MASTER
+-CV
+-Serial Comunication >> Arduino >> Sensor
+-Mavlink Communication >> Pixhawk >> Motor
+-Main Control
