@@ -23,7 +23,7 @@ def main():
     try:
         # Koneksi ke Pixhawk melalui serial port
         print("Connecting to Pixhawk")
-        vehicle = connect('COM7', baud=921600, wait_ready=True)
+        vehicle = connect('/dev/ttyACM0', baud=921600, wait_ready=True)
         # vehicle = connect('127.0.0.1:14550', wait_ready=True)
     except Exception as e:
         print(f"Failed to connect to the vehicle: {e}")
