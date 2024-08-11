@@ -1,65 +1,118 @@
-from module_serial import SerialCommunicator
+import serial
+import serial.tools.list_ports
 import time
 
-port = "COM4"
-baudrate = 57600
-serial_comm = SerialCommunicator(port=port, baudrate=baudrate)
 
-# Loop untuk mencoba membuka port serial
-while not serial_comm.is_connected:
-    try:
-        serial_comm.begin()
-        if serial_comm.is_connected:
-            print(f"Port {port} is successfully opened.")
-        else:
-            raise Exception("Port is not available")
-    except Exception as e:
-        print(f"Failed to open port {port}: {e}")
-        print("Retrying in 5 seconds...")
-        time.sleep(5)  # Tunggu 5 detik sebelum mencoba lagi
+class SerialCommunicator:
+    def __init__(self, port, baudrate):
+        self.port = port
+        self.baudrate = baudrate
+        self.ser = None
+        self.is_connected = False
 
-jumlah_data = 5
-try:
-    while True:
+    def begin(self):
         try:
-            serial_comm.flush()
-            response = serial_comm.parsing(",", jumlah_data, 500)
+            if self.ser is None or not self.ser.is_open:
+                self.ser = serial.Serial(
+                    port=self.port,
+                    baudrate=self.baudrate,
+                    bytesize=serial.EIGHTBITS,
+                    parity=serial.PARITY_NONE,
+                    stopbits=serial.STOPBITS_ONE,
+                    timeout=1
+                )
+                self.is_connected = True
+                print(f"Port {self.port} is open.")
+        except serial.SerialException as e:
+            print(f"Error initializing serial port: {e}")
+            self.ser = None
+            self.is_connected = False
 
-            if isinstance(response, list) and len(response) == jumlah_data:
-                # Mengambil data sensor
-                sensor_depan = response[0]
-                sensor_belakang = response[1]
-                sensor_kanan = response[2]
-                sensor_kiri = response[3]
-                sensor_bawah = response[4]
+    def end(self):
+        try:
+            if self.ser and self.ser.is_open:
+                self.ser.close()
+                self.is_connected = False
+                print(f"Port {self.port} is closed.")
+        except serial.SerialException as e:
+            print(f"Error closing serial port: {e}")
 
-                print(response)
-                print(
-                    f"Depan :{sensor_depan} | Belakang :{sensor_belakang} | Kanan:{sensor_kanan} | Kiri:{sensor_kiri} | Bawah:{sensor_bawah}")
+    def reconnect(self, delay_ms):
+        self.end()
+        # Tunggu sebentar sebelum mencoba menyambung kembali
+        time.sleep(delay_ms/1000)
+        self.begin()
 
-            else:
-                print(f"Received data is incomplete or invalid: {response}")
+    def available(self):
+        try:
+            return self.ser.in_waiting > 0 if self.ser else False
+        except serial.SerialException as e:
+            print(f"Error checking data availability: {e}")
+            return False
 
-        except serial_comm.SerialException as e:
-            print(f"SerialException: {e}. Attempting to reconnect...")
-            serial_comm.reconnect(5000)
-            continue
+    def write(self, data, delay_ms=None):
+        try:
+            if self.ser:
+                if delay_ms:
+                    time.sleep(delay_ms / 1000)
+                data = data + "\n"
+                self.ser.write(data.encode('utf-8'))
+        except serial.SerialException as e:
+            print(f"Error writing to serial port: {e}")
 
-        except PermissionError as e:
-            print(f"PermissionError: {e}. Attempting to reconnect...")
-            serial_comm.reconnect(5000)
-            continue
+    def read(self, delay_ms=None):
+        try:
+            if self.ser and self.available():
+                if delay_ms:
+                    time.sleep(delay_ms / 1000)
+                raw = self.ser.readline()
+                if raw:
+                    data = str(raw[:len(raw) - 1])
+                    result = data[2:len(data) - 3]
+                    return result
+            return None
+        except serial.SerialException as e:
+            print(f"Error reading from serial port: {e}")
+            return None
 
-        except Exception as e:
-            print(f"Unexpected error: {e}. Attempting to reconnect...")
-            serial_comm.reconnect(5000)
-            continue
+    def parsing(self, separator, count, delay_ms=None):
+        try:
+            data = self.read(delay_ms)
+            if data is None:
+                return "No data received"
 
-except KeyboardInterrupt:
-    print("Terminated by user")
+            warning = "Data is not completed: " + data
+            if data.count(separator) == count-1:
+                data_receive = data.split(separator)
+                return data_receive
+            return warning
+        except serial.SerialException as e:
+            print(f"Error parsing data: {e}")
+            return "Parsing error"
 
-except Exception as e:
-    print(f"An error occurred: {e}")
+    def flush(self):
+        try:
+            if self.ser:
+                self.ser.flush()
+        except serial.SerialException as e:
+            print(f"Error flushing serial port: {e}")
 
-finally:
-    serial_comm.end()
+    def flush_input(self):
+        try:
+            if self.ser:
+                self.ser.flushInput()
+        except serial.SerialException as e:
+            print(f"Error flushing input buffer: {e}")
+
+    def flush_output(self):
+        try:
+            if self.ser:
+                self.ser.flushOutput()
+        except serial.SerialException as e:
+            print(f"Error flushing output buffer: {e}")
+
+
+def serial_port_checker():
+    ports = serial.tools.list_ports.comports()
+    for port in ports:
+        print(f"{port.device} - {port.description}")
