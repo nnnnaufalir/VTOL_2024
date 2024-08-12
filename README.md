@@ -7,11 +7,11 @@ VTOL KRTI 2024
 Program ini menggunakan lima sensor VL53L1X untuk mengukur jarak ke objek di lima arah berbeda (depan, belakang, kanan, kiri, dan bawah). Jarak yang diukur kemudian dikirimkan ke komputer melalui komunikasi serial dalam format CSV (Comma-Separated Values).
 
 ## Persyaratan
-<br>Arduino (misalnya, Arduino Uno, Nano, atau yang kompatibel)</br>
-<br>Lima sensor VL53L1X</br>
-<br>Library Adafruit_VL53L1X</br>
-<br>Kabel jumper</br>
-<br>Resistor jika diperlukan untuk pengaturan I2C yang benar</br>
+<br>Arduino (misalnya, Arduino Uno, Nano, atau yang kompatibel)<br/>
+Lima sensor VL53L1X<br/>
+Library Adafruit_VL53L1X<br/>
+Kabel jumper<br/>
+Resistor jika diperlukan untuk pengaturan I2C yang benar</br>
 
 ## Pinout
 Setiap sensor terhubung ke pin XSHUT yang berbeda untuk memungkinkan pengaturan alamat I2C yang unik:
