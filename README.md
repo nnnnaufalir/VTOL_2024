@@ -23,24 +23,24 @@ Bawah: Pin 12 (XSHUT_BOTTOM)
 
 ## Alamat I2C
 Setiap sensor diberi alamat I2C yang unik:
-Depan: 0x30
-Belakang: 0x31
-Kanan: 0x32
-Kiri: 0x33
-Bawah: 0x34
+<br>Depan: 0x30
+<br>Belakang: 0x31
+<br>Kanan: 0x32
+<br>Kiri: 0x33
+<br>Bawah: 0x34
 
 ## Fitur Utama
-Inisialisasi Sensor: Masing-masing sensor diinisialisasi dengan XSHUT pin untuk mengatur alamat I2C yang unik.
-Pengukuran Jarak: Program menggunakan buffer untuk menyimpan pembacaan jarak terbaru dan menghitung rata-rata jarak untuk mengurangi noise.
-Pengiriman Data: Jarak dari lima sensor dikirim melalui komunikasi serial dataSend(data_0,data_1,data_2,data_3,data_4).
+<br>Inisialisasi Sensor: Masing-masing sensor diinisialisasi dengan XSHUT pin untuk mengatur alamat I2C yang unik.
+<br>Pengukuran Jarak: Program menggunakan buffer untuk menyimpan pembacaan jarak terbaru dan menghitung rata-rata jarak untuk mengurangi noise.
+<br>Pengiriman Data: Jarak dari lima sensor dikirim melalui komunikasi serial dataSend(data_0,data_1,data_2,data_3,data_4).
 
 ## Menghubungkan Sensor
 Hubungkan sensor VL53L1X ke Arduino sesuai dengan pin yang telah ditentukan:
-Sensor depan (Front): Pin 2 (XSHUT_FRONT)
-Sensor belakang (Back): Pin 14 (XSHUT_BACK)
-Sensor kanan (Right): Pin 4 (XSHUT_RIGHT)
-Sensor kiri (Left): Pin 5 (XSHUT_LEFT)
-Sensor bawah (Bottom): Pin 12 (XSHUT_BOTTOM)
+<br>Sensor depan (Front): Pin 2 (XSHUT_FRONT)
+<br>Sensor belakang (Back): Pin 14 (XSHUT_BACK)
+<br>Sensor kanan (Right): Pin 4 (XSHUT_RIGHT)
+<br>Sensor kiri (Left): Pin 5 (XSHUT_LEFT)
+<br>Sensor bawah (Bottom): Pin 12 (XSHUT_BOTTOM)
 
 ## 3. Membaca Data
 Data jarak akan dikirimkan ke komputer melalui port serial dengan format CSV sebagai berikut:
@@ -48,14 +48,14 @@ Data jarak akan dikirimkan ke komputer melalui port serial dengan format CSV seb
 data_0,data_1,data_2,data_3,data_4
 </pre>
 Dimana:
-data_0: Jarak sensor depan
-data_1: Jarak sensor belakang
-data_2: Jarak sensor kanan
-data_3: Jarak sensor kiri
-data_4: Jarak sensor bawah
+<br>data_0: Jarak sensor depan
+<br>data_1: Jarak sensor belakang
+<br>data_2: Jarak sensor kanan
+<br>data_3: Jarak sensor kiri
+<br>data_4: Jarak sensor bawah
 
 # Catatan
-Timing Budget: Timing budget dari sensor diatur menggunakan konstanta TIMING, yang dapat diubah untuk menyesuaikan kecepatan pembacaan jarak.
-Buffer Size: Ukuran buffer diatur menggunakan konstanta BUFFER_SIZE, yang digunakan untuk menyimpan dan merata-rata pembacaan jarak untuk mengurangi noise.
-Dokumentasi ini dapat digunakan sebagai panduan untuk memahami dan menggunakan program Arduino yang mengukur jarak dengan sensor VL53L1X dan mengirimkan data ke komputer melalui serial.
+<br>Timing Budget: Timing budget dari sensor diatur menggunakan konstanta TIMING, yang dapat diubah untuk menyesuaikan kecepatan pembacaan jarak.
+<br>Buffer Size: Ukuran buffer diatur menggunakan konstanta BUFFER_SIZE, yang digunakan untuk menyimpan dan merata-rata pembacaan jarak untuk mengurangi noise.
+<br>Dokumentasi ini dapat digunakan sebagai panduan untuk memahami dan menggunakan program Arduino yang mengukur jarak dengan sensor VL53L1X dan mengirimkan data ke komputer melalui serial.
 
